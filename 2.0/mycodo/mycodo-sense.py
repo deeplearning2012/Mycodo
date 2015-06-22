@@ -55,7 +55,7 @@ while(loop):
   # if two temperature readings aren't within a few degrees, compare two more times until they do
   # catches the majority of errors
 
-  output = subprocess.check_output(["/var/www/bin/DHT_Read", "2302", "4"]);
+  output = subprocess.check_output(["/var/www/mycodo/DHT_Read", "2302", "4"]);
   if (disp): print output
   matches = re.search("Temp =\s+([0-9.]+)", output)
   if (not matches):
@@ -72,7 +72,8 @@ while(loop):
 	time.sleep(3)
 	continue
   humidity = float(matches.group(1))
-  dewpoint = (tempc - ((100 - humidity)/ 5))*9/5+32
+  dewpointc = tempc - ((100 - humidity)/ 5)
+  dewpointf = (tempc - ((100 - humidity)/ 5))*9/5+32
   heatindex =  -42.379 + 2.04901523 * tempf + 10.14333127 * humidity - 0.22475541 * tempf * humidity - 6.83783 * 10**-3 * tempf**2 - 5.481717 * 10**-2 * humidity**2 + 1.22874 * 10**-3 * tempf**2 * humidity + 8.5282 * 10**-4 * tempf * humidity**2 - 1.99 * 10**-6 * tempf**2 * humidity**2
   timestamp = time.time()-1
 
@@ -82,9 +83,9 @@ while(loop):
     time.sleep(3)
     continue
 
-  if (abs(tempf2-tempf) > 4):
+  if (abs(tempf2-tempf) > 3):
     chktemp = 0
-    print "sucessive Temp readings more than 4 degrees apart- reread until less than 3\n"
+    print "sucessive Temp readings more than 3 degrees apart- reread until less than 3\n"
     time.sleep(3)
     continue
 
@@ -95,15 +96,16 @@ while(loop):
     print "Temperature: %.1f C" % tempc
     print "Temperature: %.1f F" % tempf
     print "Heat Index:  %.1f F" % heatindex
-    print "Dew Point:   %.1f F" % dewpoint
+    print "Dew Point:   %.1f C" % dewpointc
+    print "Dew Point:   %.1f F" % dewpointf
 
     # Append the data in the file, including a timestamp
     try:
-      open(writefile, 'ab').write('{0} {1:.0f} {2:.1f} {3:.1f} {4:.1f} {5:.1f} {6:.1f}\n'.format(datetime.datetime.now().strftime("%Y %m %d %H %M %S"), timestamp, humidity, tempc, tempf, dewpoint, heatindex))
+      open(writefile, 'ab').write('{0} {1:.0f} {2:.1f} {3:.1f} {4:.1f} {5:.1f} {6:.1f}\n'.format(datetime.datetime.now().strftime("%Y %m %d %H %M %S"), timestamp, humidity, tempc, tempf, dewpointf, dewpointc))
       print "Data appended to", writefile
     except:
       print "Unable to append data."
       sys.exit()
   else:
-    print "{0} {1:.0f} {2:.1f} {3:.1f} {4:.1f} {5:.1f} {6:.1f}".format(datetime.datetime.now().strftime("%Y %m %d %H %M %S"), timestamp-1, humidity, tempc, tempf, dewpoint, heatindex)
+    print "{0} {1:.0f} {2:.1f} {3:.1f} {4:.1f} {5:.1f} {6:.1f}".format(datetime.datetime.now().strftime("%Y %m %d %H %M %S"), timestamp-1, humidity, tempc, tempf, dewpointf, dewpointc)
   loop = 0
