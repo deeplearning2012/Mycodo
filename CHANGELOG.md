@@ -1,3 +1,10 @@
+## 8.5.4 (2020-06-06)
+
+### Bugfixes
+
+ - Fix Atlas Scientific pump on duration calculation
+
+
 ## 8.5.3 (2020-06-06)
 
 ### Bugfixes
