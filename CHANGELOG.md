@@ -1,3 +1,11 @@
+## 8.5.3 (2020-06-06)
+
+### Bugfixes
+
+ - Fix upgrade not preserving custom outputs
+ - Fix missing output device measurements in database ([#779](https://github.com/kizniche/mycodo/issues/779))
+
+
 ## 8.5.2 (2020-06-01)
 
 ### Bugfixes

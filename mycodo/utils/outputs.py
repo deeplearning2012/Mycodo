@@ -92,6 +92,7 @@ def parse_output_information():
 
                 dict_outputs = dict_has_value(dict_outputs, output_custom, 'output_name')
                 dict_outputs = dict_has_value(dict_outputs, output_custom, 'output_library')
+                dict_outputs = dict_has_value(dict_outputs, output_custom, 'measurements_dict')
 
                 dict_outputs = dict_has_value(dict_outputs, output_custom, 'on_state_internally_handled')
                 dict_outputs = dict_has_value(dict_outputs, output_custom, 'output_types')
